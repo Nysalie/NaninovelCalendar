@@ -1,0 +1,6 @@
+Showing the Calendar.
+@showUi CalendarUI
+Adding 2 days plus 24 hours.
+@addtime days:2
+@addtime hours:24
+Today is {month}, {day}.
