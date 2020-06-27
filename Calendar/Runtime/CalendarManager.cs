@@ -17,8 +17,14 @@ namespace NaninovelCalendar
 
         public UniTask InitializeServiceAsync() => UniTask.CompletedTask;
 
-        public void ResetService() { }
+        public void ResetService()
+        {
+            Engine.GetService<IUIManager>().GetUI<CalendarUI>().ResetDate();
+        }
 
-        public void DestroyService() { }
+        public void DestroyService()
+        {
+            Engine.GetService<IUIManager>().GetUI<CalendarUI>().ResetDate();
+        }
     }
 }

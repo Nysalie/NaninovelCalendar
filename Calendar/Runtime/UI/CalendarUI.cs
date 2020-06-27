@@ -32,9 +32,9 @@ namespace NaninovelCalendar
         [Tooltip("How many hours should the button add.")]
         [SerializeField] private int hoursToAdd;
 
-        private StateManager stateManager;
+        private IStateManager stateManager;
         private CalendarManager calendarManager;
-        private CustomVariableManager varMan;
+        private ICustomVariableManager varMan;
 
         private string date = "gameDate";
         private string day = "day";
@@ -46,9 +46,9 @@ namespace NaninovelCalendar
             base.Awake();
             this.AssertRequiredObjects(dayText, monthText);
 
-            stateManager = Engine.GetService<StateManager>();
+            stateManager = Engine.GetService<IStateManager>();
             calendarManager = Engine.GetService<CalendarManager>();
-            varMan = Engine.GetService<CustomVariableManager>();
+            varMan = Engine.GetService<ICustomVariableManager>();
 
             varMan.SetVariableValue(date, calendarManager.Configuration.StartDate);
 
@@ -73,6 +73,13 @@ namespace NaninovelCalendar
             return UniTask.CompletedTask;
         }
 
+        public void ResetDate()
+        {
+            varMan.SetVariableValue(date, calendarManager.Configuration.StartDate);
+            ConvertDate();
+            UpdateDate();
+        }
+
         public async UniTask AddTime(int hours = 0, int days = 0)
         {
             if (hours > 0)
@@ -84,9 +91,17 @@ namespace NaninovelCalendar
             await UpdateDate();
         }
 
-        protected void AddHours() => AddTime(hours:hoursToAdd);
+        protected void AddHours()
+        {
+            AddTime(hours:hoursToAdd);
+            stateManager.PushRollbackSnapshot(true);
+        }
 
-        protected void AddDays() => AddTime(days:daysToAdd);
+        protected void AddDays()
+        { 
+            AddTime(days:daysToAdd);
+            stateManager.PushRollbackSnapshot(true);
+        }
 
         
         protected override void OnEnable ()
