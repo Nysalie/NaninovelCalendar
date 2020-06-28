@@ -94,30 +94,13 @@ namespace NaninovelCalendar
         protected void AddHours()
         {
             AddTime(hours:hoursToAdd);
-            stateManager.PushRollbackSnapshot(true);
+            stateManager.PushRollbackSnapshot();
         }
 
         protected void AddDays()
         { 
             AddTime(days:daysToAdd);
-            stateManager.PushRollbackSnapshot(true);
-        }
-
-        
-        protected override void OnEnable ()
-        {
-            base.OnEnable();
-        
-            stateManager.AddOnGameSerializeTask(SerializeState);
-            stateManager.AddOnGameDeserializeTask(DeserializeState);
-        }
-        
-        protected override void OnDisable ()
-        {
-            base.OnDisable();
-        
-            stateManager.RemoveOnGameSerializeTask(SerializeState);
-            stateManager.RemoveOnGameDeserializeTask(DeserializeState);
+            stateManager.PushRollbackSnapshot();
         }
 
         protected override void SerializeState (GameStateMap stateMap)
